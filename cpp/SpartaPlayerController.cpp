@@ -79,13 +79,20 @@ void ASpartaPlayerController::ShowMainMenu(bool bIsRestart)
 
 		if (UTextBlock* ButtonText = Cast<UTextBlock>(MainMenuWidgetInstance->GetWidgetFromName(TEXT("StartButtonText"))))
 		{
-			if (bIsRestart)
+			UFunction* PlayAnimFunc = MainMenuWidgetInstance->FindFunction(FName("PlayGameOverAnim"));
+			if (PlayAnimFunc)
 			{
-				ButtonText->SetText(FText::FromString(TEXT("Restart")));
+				MainMenuWidgetInstance->ProcessEvent(PlayAnimFunc, nullptr);
 			}
-			else
+
+			if (UTextBlock* TotalScoreText = Cast<UTextBlock>(MainMenuWidgetInstance->GetWidgetFromName("TotalScoreText")))
 			{
-				ButtonText->SetText(FText::FromString(TEXT("Start")));
+				if (USpartaGameInstance* SpartaGameInstance = Cast<USpartaGameInstance>(UGameplayStatics::GetGameInstance(this)))
+				{
+					TotalScoreText->SetText(FText::FromString(
+						FString::Printf(TEXT("Total Score: %d"), SpartaGameInstance->TotalScore)
+					));
+				}
 			}
 		}
 	}
