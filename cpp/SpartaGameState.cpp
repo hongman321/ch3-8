@@ -75,10 +75,10 @@ void ASpartaGameState::StartLevel()
 	TArray<AActor*> FoundVolumes;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASpawnVolum::StaticClass(), FoundVolumes);
 
-	// 초기 스폰: 40개
-	SpawnItems(40, FoundVolumes);
+	// 초기 스폰: 10개
+	SpawnItems(10, FoundVolumes);
 
-	// 10초마다 추가 스폰: 20개
+	// 10초마다 추가 스폰
 	GetWorldTimerManager().SetTimer(SpawnTimerHandle, this, &ASpartaGameState::SpawnAdditionalItems, 10.0f, true);
 
 	// 레벨 제한 시간 타이머
@@ -90,14 +90,6 @@ void ASpartaGameState::StartLevel()
 		false
 	);
 
-
-	GetWorldTimerManager().SetTimer(
-		LevelTimerHandle,
-		this,
-		&ASpartaGameState::OnLevelTimeUp,
-		LevelDuration,
-		false
-	);
 
 	// UpdateHUD();
 }
@@ -154,6 +146,7 @@ void ASpartaGameState::OnGameOver()
 	{
 		if (ASpartaPlayerController* SpartaPlayerController = Cast<ASpartaPlayerController>(PlayerController))
 		{
+			SpartaPlayerController->SetPause(true);
 			SpartaPlayerController->ShowMainMenu(true);
 		}
 	}
@@ -218,6 +211,6 @@ void ASpartaGameState::SpawnAdditionalItems()
 	TArray<AActor*> FoundVolumes;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASpawnVolum::StaticClass(), FoundVolumes);
 
-	SpawnItems(20, FoundVolumes);
-	UE_LOG(LogTemp, Warning, TEXT("Spawned additional 20 Item, Total Spawned: %d"), SpawnedCoinCount);
+	SpawnItems(5, FoundVolumes);
+	UE_LOG(LogTemp, Warning, TEXT("Spawned additional 5 Item, Total Spawned: %d"), SpawnedCoinCount);
 }
