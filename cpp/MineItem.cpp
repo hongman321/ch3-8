@@ -87,7 +87,7 @@ void AMineItem::Explode()
 		{
 			Particle->DestroyComponent();
 		},
-			5.0f,
+			5.0f, //5초뒤에 파티클삭제(왜 삭제가 안되지..?)
 			false
 		);
 	}
